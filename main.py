@@ -1,6 +1,7 @@
 import streamlit as st
 from pytube import YouTube
 import moviepy.editor as mp
+import base64
 
 def download_mp3_and_mp4(url):
     try:
@@ -36,13 +37,21 @@ def main():
             if mp3_file and mp4_file:
                 st.success("Download and conversion completed successfully!")
 
+                # Read MP3 file as bytes
+                with open(mp3_file, 'rb') as file:
+                    mp3_bytes = file.read()
+
                 # Display the MP3 file with a download button
-                st.audio(mp3_file, format='audio/mp3')
-                st.download_button("Download MP3", data=mp3_file, file_name=mp3_file)
+                st.audio(mp3_bytes, format='audio/mp3')
+                st.download_button("Download MP3", data=mp3_bytes, file_name=mp3_file)
+
+                # Read MP4 file as bytes
+                with open(mp4_file, 'rb') as file:
+                    mp4_bytes = file.read()
 
                 # Display the MP4 file with a download button
-                st.video(mp4_file)
-                st.download_button("Download MP4", data=mp4_file, file_name=mp4_file)
+                st.video(mp4_bytes)
+                st.download_button("Download MP4", data=mp4_bytes, file_name=mp4_file)
 
 if __name__ == '__main__':
     main()
